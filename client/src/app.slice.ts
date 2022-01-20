@@ -1,12 +1,6 @@
-import {
-  createSlice,
-  Dictionary,
-  nanoid,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { AppState, createAppThunk } from "./store";
-import * as modal from "./modal/modal.slice";
+import { AppState } from "./store";
 
 function nextReasonID(reasons: Reason[]) {
   const maxId = reasons.reduce(
@@ -47,6 +41,9 @@ const appSlice = createSlice({
     unreal: (state) => {
       state.screen = "modal";
     },
+    showReport: (state) => {
+      state.screen = "report";
+    },
     confirm: (state, action: PayloadAction<SubmitPhotoPayload>) => {
       const { reasonIDs, otherReason } = action.payload;
       const { imageID } = state;
@@ -67,11 +64,6 @@ const appSlice = createSlice({
       state.marked.push(marked);
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(modal.cancel, (state) => {
-      state.screen = "pick";
-    });
-  },
 });
 
 export type SubmitPhotoPayload = {
@@ -79,13 +71,29 @@ export type SubmitPhotoPayload = {
   otherReason: string;
 };
 
-export const initialise = createAppThunk("trainer/init", async () => {
-  const response = await axios.get("http://localhost:3000/api/v1/image?id=1", {
-    responseType: "stream",
-  });
-  console.log(response);
-});
+const reasonLabelSelector = (state: AppState) => (rID: number) => {
+  const match = state.app.reasons.find((r) => r.id === rID);
 
-export const { confirm, real, unreal } = appSlice.actions;
+  if (match) return match.label;
+
+  throw new Error("Not found");
+};
+
+export const reportSelector = (state: AppState) => {
+  const ids = state.app.reasons.map((r) => r.id);
+  const getLabel = reasonLabelSelector(state);
+  return ids
+    .map((rID) => {
+      return {
+        label: getLabel(rID),
+        photos: state.app.marked
+          .filter((ph) => ph.reasonIDs.includes(rID))
+          .map((r) => `http://localhost:3000/api/v1/image?id=${r.imageID}`),
+      };
+    })
+    .filter((group) => group.photos.length > 0);
+};
+
+export const { confirm, real, unreal, showReport } = appSlice.actions;
 
 export default appSlice.reducer;

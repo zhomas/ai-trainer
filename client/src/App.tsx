@@ -1,19 +1,24 @@
-import React, { FC, useEffect } from "react";
-import logo from "./logo.svg";
+import { FC } from "react";
 import "./App.css";
-import { AppDispatch, AppState, useAppDispatch, useAppSelector } from "./store";
-import { initialise, real, unreal } from "./app.slice";
+import { AppDispatch, AppState } from "./store";
+import { real, showReport, unreal } from "./app.slice";
 import { connect, ConnectedProps } from "react-redux";
+import Report from "./report/Report";
 import Modal from "./modal/Modal";
 
 type Props = ConnectedProps<typeof connector>;
 
-const App: FC<Props> = ({ markReal, markUnreal, imageURL, showModal }) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(initialise());
-  }, []);
+const App: FC<Props> = ({
+  markReal,
+  markUnreal,
+  imageURL,
+  screen,
+  marked,
+  showReport,
+}) => {
+  if (screen === "report") {
+    return <Report />;
+  }
 
   return (
     <div className="App">
@@ -24,8 +29,15 @@ const App: FC<Props> = ({ markReal, markUnreal, imageURL, showModal }) => {
         <button onClick={markReal}>Real</button>
         <button onClick={markUnreal}>Not real</button>
       </div>
-      <div>{}</div>
-      {showModal && <Modal />}
+      <button onClick={showReport}>Show Report</button>
+      <div>
+        {marked.map((item) => (
+          <div>
+            <img src={item.imageURL} />
+          </div>
+        ))}
+      </div>
+      {screen === "modal" && <Modal />}
     </div>
   );
 };
@@ -37,10 +49,10 @@ const mapStateToProps = (state: AppState) => {
 
   return {
     imageURL: getImageURL(state.app.imageID),
-    showModal: state.app.screen === "modal",
+    screen: state.app.screen,
     marked: state.app.marked.map((m) => ({
       imageURL: getImageURL(m.imageID),
-      labels: [""],
+      reasons: m.reasonIDs,
     })),
   };
 };
@@ -49,6 +61,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) => {
   return {
     markReal: () => dispatch(real()),
     markUnreal: () => dispatch(unreal()),
+    showReport: () => dispatch(showReport()),
   };
 };
 
