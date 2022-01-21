@@ -75,4 +75,4 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connector(App)
