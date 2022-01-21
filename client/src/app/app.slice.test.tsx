@@ -1,6 +1,3 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import App from '.'
 import reducer, { submitResult, removeResult, Result } from './app.slice'
 
 it('adds a result to the state', () => {
