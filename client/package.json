@@ -45,7 +45,7 @@
     ]
   },
   "prettier": {
-    "printWidth": 90,
+    "printWidth": 95,
     "semi": false,
     "singleQuote": true,
     "arrowParens": "avoid"

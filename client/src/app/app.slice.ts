@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { AppState } from './store'
 
 function nextReasonID(reasons: Reason[]) {
@@ -78,9 +77,6 @@ const appSlice = createSlice({
     real: state => {
       state.imageID = (state.imageID + 1) % 16
     },
-    unreal: state => {
-      state.screen = 'modal'
-    },
     showReport: state => {
       state.screen = 'report'
     },
@@ -113,33 +109,9 @@ const appSlice = createSlice({
 
 export type SubmitPhotoPayload = {
   reasonIDs: number[]
-  otherReason: string
+  otherReason?: string
 }
 
-const reasonLabelSelector = (state: AppState) => (rID: number) => {
-  const match = state.app.reasons.find(r => r.id === rID)
-
-  if (match) return match.label
-
-  throw new Error('Not found')
-}
-
-export const reportSelector = (state: AppState) => {
-  const ids = state.app.reasons.map(r => r.id)
-  const getLabel = reasonLabelSelector(state)
-  return ids
-    .map(rID => {
-      return {
-        label: getLabel(rID),
-        photos: state.app.marked
-          .filter(ph => ph.reasonIDs.includes(rID))
-          .map(r => `http://localhost:3000/api/v1/image?id=${r.imageID}`),
-      }
-    })
-    .filter(group => group.photos.length > 0)
-}
-
-export const { confirm, real, unreal, remove, showReport, showModal, showPicker } =
-  appSlice.actions
+export const { confirm, real, remove, showReport, showModal, showPicker } = appSlice.actions
 
 export default appSlice.reducer

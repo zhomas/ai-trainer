@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
-import { AppDispatch, AppState } from '../store'
 import styles from './modal.module.css'
 import { connect, ConnectedProps } from 'react-redux'
-import { toggleReason } from './modal.slice'
-import { confirm, showPicker, SubmitPhotoPayload } from '../app.slice'
+import { AppDispatch, AppState } from '../../app/store'
+import { confirm, showPicker, SubmitPhotoPayload } from '../../app/app.slice'
 import { Dictionary } from '@reduxjs/toolkit'
+
 type Props = ConnectedProps<typeof connector>
 
 const Modal: FC<Props> = ({ reasons, confirm, showPicker }) => {
@@ -65,24 +65,14 @@ const Modal: FC<Props> = ({ reasons, confirm, showPicker }) => {
   )
 }
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    reasons: state.app.reasons,
-    selected: state.modal.selected,
-  }
-}
+const mapStateToProps = (state: AppState) => ({
+  reasons: state.app.reasons,
+})
 
-const mapDispatchToProps = (dispatch: AppDispatch) => {
-  return {
-    select: (id: string) => {
-      dispatch(toggleReason({ id }))
-    },
-    confirm: (arg: SubmitPhotoPayload) => {
-      dispatch(confirm(arg))
-    },
-    showPicker: () => dispatch(showPicker()),
-  }
-}
+const mapDispatchToProps = (dispatch: AppDispatch) => ({
+  confirm: (arg: SubmitPhotoPayload) => dispatch(confirm(arg)),
+  showPicker: () => dispatch(showPicker()),
+})
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
 
