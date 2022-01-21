@@ -3,9 +3,9 @@ import { AppState } from './store'
 
 const IMAGES_COUNT = 16
 
-type Result = { id: number; reasonIDs: number[] }
+export type Result = { id: number; reasonIDs: number[] }
 
-type Reason = { id: number; label: string }
+export type Reason = { id: number; label: string }
 
 interface TrainerState {
   imageID: number

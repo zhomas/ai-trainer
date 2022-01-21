@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import App from '.'
-import reducer, { submitResult, removeResult } from './app.slice'
+import reducer, { submitResult, removeResult, Result } from './app.slice'
 
 it('adds a result to the state', () => {
   const action = submitResult({ reasonIDs: [0] })
@@ -16,7 +16,7 @@ it('adds a result to the state', () => {
     action
   )
 
-  expect(state.results).toEqual([{ imageID: 0, reasonIDs: [0] }])
+  expect(state.results).toEqual<Result[]>([{ id: 0, reasonIDs: [0] }])
 })
 
 it('adds a result with multiple reasons to the state', () => {
@@ -32,7 +32,7 @@ it('adds a result with multiple reasons to the state', () => {
     action
   )
 
-  expect(state.results).toEqual([{ imageID: 0, reasonIDs: [0, 1, 2] }])
+  expect(state.results).toEqual<Result[]>([{ id: 0, reasonIDs: [0, 1, 2] }])
 })
 
 it('removes a result from the state', () => {
