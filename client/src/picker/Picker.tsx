@@ -39,7 +39,7 @@ const Picker: FC<Props> = ({
         <button onClick={showModal}>Not real</button>
       </div>
       <div className={styles.rowGenerate}>
-        <button>Generate Report</button>
+        <button onClick={showReport}>Generate Report</button>
       </div>
       {renderResults()}
     </div>

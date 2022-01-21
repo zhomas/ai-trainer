@@ -35,10 +35,10 @@ const Modal: FC<Props> = ({ reasons, confirm, showPicker }) => {
           {reasons.map((r, i) => (
             <label>
               <input
+                type="checkbox"
                 value={r.id}
                 checked={!!checked[r.id]}
                 onChange={() => handleToggle(r.id)}
-                type="checkbox"
               />
               {r.label}
             </label>

@@ -21,32 +21,35 @@ interface TrainerState {
 const initialState: TrainerState = {
   imageID: 4,
   screen: 'pick',
-  marked: [
-    {
-      imageID: 0,
-      reasonIDs: [10],
-    },
-    {
-      imageID: 1,
-      reasonIDs: [10],
-    },
-    {
-      imageID: 2,
-      reasonIDs: [10],
-    },
-    {
-      imageID: 3,
-      reasonIDs: [12],
-    },
-  ],
+  marked: [],
   reasons: [
     {
-      id: 10,
+      id: 0,
       label: 'Background',
     },
     {
-      id: 12,
+      id: 1,
       label: 'Eyes',
+    },
+    {
+      id: 2,
+      label: 'Nose',
+    },
+    {
+      id: 3,
+      label: 'Hair',
+    },
+    {
+      id: 4,
+      label: 'Mouth',
+    },
+    {
+      id: 5,
+      label: 'Ears',
+    },
+    {
+      id: 6,
+      label: 'Jewellery',
     },
   ],
 }

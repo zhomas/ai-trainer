@@ -1,8 +1,8 @@
 .modal {
   position: fixed;
-  background: white;
+  background: #2a2d33;
   padding: 20px;
-  border: 1px solid;
+  border: 1px solid #373b44;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,7 +24,7 @@
 .reasonsList {
   overflow-y: scroll;
   height: 160px;
-  border: 1px solid;
+  border: 1px solid #373b44;
 }
 
 .reasonsList label {
@@ -40,5 +40,7 @@
   display: block;
   width: 100%;
   padding: 10px;
-  border: 1px solid;
+  border: 1px solid #373b44;
+  background: transparent;
+  color: white;
 }
