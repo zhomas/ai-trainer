@@ -1,0 +1,25 @@
+.container {
+  max-width: 1020px;
+  margin: 80px auto;
+}
+
+.sectionHeading {
+  margin: 20px 0;
+}
+
+.sectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 2vw;
+}
+
+.underbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2a2d33;
+  border-top: 1px solid #373b44;
+  padding: 20px;
+  text-align: right;
+}

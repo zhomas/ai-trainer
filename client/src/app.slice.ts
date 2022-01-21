@@ -21,7 +21,24 @@ interface TrainerState {
 const initialState: TrainerState = {
   imageID: 4,
   screen: 'pick',
-  marked: [],
+  marked: [
+    {
+      imageID: 4,
+      reasonIDs: [0, 3],
+    },
+    {
+      imageID: 5,
+      reasonIDs: [2, 3],
+    },
+    {
+      imageID: 6,
+      reasonIDs: [0],
+    },
+    {
+      imageID: 7,
+      reasonIDs: [0, 1, 3],
+    },
+  ],
   reasons: [
     {
       id: 0,

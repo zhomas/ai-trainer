@@ -1,33 +1,43 @@
-import React, { FC } from "react";
-import { connect, ConnectedProps } from "react-redux";
-import { reportSelector } from "../app.slice";
-import { AppState } from "../store";
+import React, { FC } from 'react'
+import { connect, ConnectedProps } from 'react-redux'
+import { reportSelector, showPicker } from '../app.slice'
+import { AppDispatch, AppState } from '../store'
+import styles from './report.module.css'
 
-type Props = ConnectedProps<typeof connector>;
+type Props = ConnectedProps<typeof connector>
 
-const Report: FC<Props> = ({ groups }) => {
+const Report: FC<Props> = ({ groups, showPicker }) => {
   return (
-    <div>
-      {groups.map((group) => (
+    <div className={styles.container}>
+      {groups.map(group => (
         <>
-          <h2>{group.label}</h2>
-          <div>
-            {group.photos.map((url) => (
+          <h2 className={styles.sectionHeading}>{group.label}</h2>
+          <div className={styles.sectionGrid}>
+            {group.photos.map(url => (
               <img src={url} />
             ))}
           </div>
         </>
       ))}
+      <div className={styles.underbar}>
+        <button onClick={showPicker}>Add more</button>
+      </div>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: AppState) => {
   return {
     groups: reportSelector(state),
-  };
-};
+  }
+}
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch: AppDispatch) => {
+  return {
+    showPicker: () => dispatch(showPicker()),
+  }
+}
 
-export default connector(Report);
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export default connector(Report)
