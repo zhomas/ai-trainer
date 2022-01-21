@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 import styles from './modal.module.css'
 import { connect, ConnectedProps } from 'react-redux'
 import { AppDispatch, AppState } from '../../app/store'
-import { confirm, showPicker, SubmitPhotoPayload } from '../../app/app.slice'
+import { submitResult, showPicker, SubmitPhotoPayload } from '../../app/app.slice'
 import { Dictionary } from '@reduxjs/toolkit'
 
 type Props = ConnectedProps<typeof connector>
@@ -70,7 +70,7 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  confirm: (arg: SubmitPhotoPayload) => dispatch(confirm(arg)),
+  confirm: (arg: SubmitPhotoPayload) => dispatch(submitResult(arg)),
   showPicker: () => dispatch(showPicker()),
 })
 

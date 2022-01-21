@@ -1,43 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppState } from './store'
 
-function nextReasonID(reasons: Reason[]) {
-  const maxId = reasons.reduce((maxId, reason) => Math.max(reason.id, maxId), -1)
-  return maxId + 1
-}
+const IMAGES_COUNT = 16
 
-type Marked = { imageID: number; reasonIDs: number[] }
+type Result = { id: number; reasonIDs: number[] }
 
-export type Reason = { id: number; label: string }
+type Reason = { id: number; label: string }
 
 interface TrainerState {
   imageID: number
   screen: 'pick' | 'modal' | 'report'
-  marked: Marked[]
+  results: Result[]
   reasons: Reason[]
 }
 
 const initialState: TrainerState = {
-  imageID: 4,
+  imageID: 0,
   screen: 'pick',
-  marked: [
-    {
-      imageID: 4,
-      reasonIDs: [0, 3],
-    },
-    {
-      imageID: 5,
-      reasonIDs: [2, 3],
-    },
-    {
-      imageID: 6,
-      reasonIDs: [0],
-    },
-    {
-      imageID: 7,
-      reasonIDs: [0, 1, 3],
-    },
-  ],
+  results: [],
   reasons: [
     {
       id: 0,
@@ -70,13 +50,52 @@ const initialState: TrainerState = {
   ],
 }
 
+/**
+ * Loads the next photo in the series.
+ * @param state
+ */
+const showNext = (state: TrainerState) => {
+  state.imageID = (state.imageID + 1) % IMAGES_COUNT
+}
+
+/**
+ * Gets a unique ID.
+ * @param reasons
+ * @returns number
+ */
+const nextReasonID = (reasons: Reason[]) => {
+  const maxId = reasons.reduce((maxId, reason) => Math.max(reason.id, maxId), -1)
+  return maxId + 1
+}
+
+/**
+ * Adds a result to the collection.
+ * @param state
+ * @param action
+ */
+const submitPhotoResponse = (
+  state: TrainerState,
+  action: PayloadAction<SubmitPhotoPayload>
+) => {
+  const { reasonIDs, otherReason } = action.payload
+  const { imageID } = state
+  const marked: Result = { id: imageID, reasonIDs }
+
+  if (otherReason) {
+    const id = nextReasonID(state.reasons)
+    state.reasons.push({ id, label: otherReason })
+    marked.reasonIDs.push(id)
+  }
+
+  state.screen = 'pick'
+  state.results.push(marked)
+  showNext(state)
+}
+
 const appSlice = createSlice({
   name: 'trainer',
   initialState,
   reducers: {
-    real: state => {
-      state.imageID = (state.imageID + 1) % 16
-    },
     showReport: state => {
       state.screen = 'report'
     },
@@ -86,24 +105,11 @@ const appSlice = createSlice({
     showPicker: state => {
       state.screen = 'pick'
     },
-    confirm: (state, action: PayloadAction<SubmitPhotoPayload>) => {
-      const { reasonIDs, otherReason } = action.payload
-      const { imageID } = state
-      const marked: Marked = { imageID, reasonIDs }
-
-      if (otherReason) {
-        const id = nextReasonID(state.reasons)
-        state.reasons.push({ id, label: otherReason })
-        marked.reasonIDs.push(id)
-      }
-
-      state.screen = 'pick'
-      state.imageID = (state.imageID + 1) % 16
-      state.marked.push(marked)
+    removeResult: (state, action: PayloadAction<{ id: number }>) => {
+      state.results = state.results.filter(result => result.id !== action.payload.id)
     },
-    remove: (state, action: PayloadAction<{ id: number }>) => {
-      state.marked = state.marked.filter(result => result.imageID !== action.payload.id)
-    },
+    loadNextPhoto: showNext,
+    submitResult: submitPhotoResponse,
   },
 })
 
@@ -112,6 +118,13 @@ export type SubmitPhotoPayload = {
   otherReason?: string
 }
 
-export const { confirm, real, remove, showReport, showModal, showPicker } = appSlice.actions
+export const {
+  submitResult, //
+  loadNextPhoto,
+  removeResult,
+  showReport,
+  showModal,
+  showPicker,
+} = appSlice.actions
 
 export default appSlice.reducer

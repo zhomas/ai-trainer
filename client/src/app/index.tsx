@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import styles from './app.module.css'
 import { AppDispatch, AppState } from './store'
-import { real, remove, showModal, showReport } from './app.slice'
+import { loadNextPhoto, removeResult, showModal, showReport } from './app.slice'
 import { connect, ConnectedProps } from 'react-redux'
 import Report from '../components/report'
 import Modal from '../components/modal'
@@ -19,7 +19,10 @@ const App: FC<Props> = props => {
       {props.marked.map(item => (
         <div className={styles.result}>
           <img src={item.imageURL} />
-          <span className={styles['result__delete']} onClick={() => props.remove(item.id)} />
+          <span
+            className={styles['result__delete']}
+            onClick={() => props.removeResult(item.id)}
+          />
         </div>
       ))}
     </div>
@@ -51,18 +54,18 @@ const App: FC<Props> = props => {
 const mapStateToProps = (state: AppState) => ({
   imageURL: getImageURL(state.app.imageID),
   screen: state.app.screen,
-  marked: state.app.marked.map(m => ({
-    id: m.imageID,
-    imageURL: getImageURL(m.imageID),
+  marked: state.app.results.map(m => ({
+    id: m.id,
+    imageURL: getImageURL(m.id),
     reasons: m.reasonIDs,
   })),
 })
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  markReal: () => dispatch(real()),
+  markReal: () => dispatch(loadNextPhoto()),
   showModal: () => dispatch(showModal()),
   showReport: () => dispatch(showReport()),
-  remove: (id: number) => dispatch(remove({ id })),
+  removeResult: (id: number) => dispatch(removeResult({ id })),
 })
 
 const connector = connect(mapStateToProps, mapDispatchToProps)

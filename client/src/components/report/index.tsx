@@ -26,21 +26,13 @@ const Report: FC<Props> = props => (
 )
 
 const mapStateToProps = (state: AppState) => {
-  const getLabel = (rID: number) => {
-    const match = state.app.reasons.find(r => r.id === rID)
-    if (match) return match.label
-    throw new Error('Not found')
-  }
-
   const groups = state.app.reasons
-    .map(reason => {
-      return {
-        label: getLabel(reason.id),
-        photos: state.app.marked
-          .filter(ph => ph.reasonIDs.includes(reason.id))
-          .map(r => getImageURL(r.imageID)),
-      }
-    })
+    .map(reason => ({
+      label: reason.label,
+      photos: state.app.results
+        .filter(ph => ph.reasonIDs.includes(reason.id))
+        .map(r => getImageURL(r.id)),
+    }))
     .filter(group => group.photos.length > 0)
 
   return { groups }
