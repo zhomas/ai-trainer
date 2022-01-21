@@ -5,40 +5,20 @@ import { real, showReport, unreal } from "./app.slice";
 import { connect, ConnectedProps } from "react-redux";
 import Report from "./report/Report";
 import Modal from "./modal/Modal";
+import Picker from "./picker/Picker";
 
 type Props = ConnectedProps<typeof connector>;
 
-const App: FC<Props> = ({
-  markReal,
-  markUnreal,
-  imageURL,
-  screen,
-  marked,
-  showReport,
-}) => {
+const App: FC<Props> = ({ screen }) => {
   if (screen === "report") {
     return <Report />;
   }
 
   return (
-    <div className="App">
-      <div className={"active-image"}>
-        <img src={imageURL} />
-      </div>
-      <div>
-        <button onClick={markReal}>Real</button>
-        <button onClick={markUnreal}>Not real</button>
-      </div>
-      <button onClick={showReport}>Show Report</button>
-      <div>
-        {marked.map((item) => (
-          <div>
-            <img src={item.imageURL} />
-          </div>
-        ))}
-      </div>
+    <>
+      <Picker />
       {screen === "modal" && <Modal />}
-    </div>
+    </>
   );
 };
 

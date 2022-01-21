@@ -1,0 +1,69 @@
+.container {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr max-content max-content 1fr;
+  grid-gap: 1em 1em;
+}
+
+.rowImage {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-top: 2vh;
+}
+
+.rowPick {
+  text-align: center;
+}
+
+.rowGenerate {
+  border-top: 1px solid;
+  text-align: right;
+  padding: 10px 2vw 0;
+}
+
+.rowResults {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 2vw;
+  overflow-y: scroll;
+  margin: 0 2vw;
+  padding-right: 10px;
+}
+
+.result {
+  position: relative;
+}
+
+.result__delete {
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: black;
+  color: white;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.result__delete::before {
+  content: '✖';
+  display: block;
+}
+
+.result:hover .result__delete {
+  display: flex;
+}
+
+.rowEmpty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+}
