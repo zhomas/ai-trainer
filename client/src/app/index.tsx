@@ -48,26 +48,22 @@ const App: FC<Props> = props => {
   )
 }
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    imageURL: getImageURL(state.app.imageID),
-    screen: state.app.screen,
-    marked: state.app.marked.map(m => ({
-      id: m.imageID,
-      imageURL: getImageURL(m.imageID),
-      reasons: m.reasonIDs,
-    })),
-  }
-}
+const mapStateToProps = (state: AppState) => ({
+  imageURL: getImageURL(state.app.imageID),
+  screen: state.app.screen,
+  marked: state.app.marked.map(m => ({
+    id: m.imageID,
+    imageURL: getImageURL(m.imageID),
+    reasons: m.reasonIDs,
+  })),
+})
 
-const mapDispatchToProps = (dispatch: AppDispatch) => {
-  return {
-    markReal: () => dispatch(real()),
-    showModal: () => dispatch(showModal()),
-    showReport: () => dispatch(showReport()),
-    remove: (id: number) => dispatch(remove({ id })),
-  }
-}
+const mapDispatchToProps = (dispatch: AppDispatch) => ({
+  markReal: () => dispatch(real()),
+  showModal: () => dispatch(showModal()),
+  showReport: () => dispatch(showReport()),
+  remove: (id: number) => dispatch(remove({ id })),
+})
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
 
